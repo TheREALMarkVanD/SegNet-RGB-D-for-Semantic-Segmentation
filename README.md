@@ -2,6 +2,14 @@
 
 This project implements semantic segmentation using the SegNet model with RGB-D images. The dataset used is **NYU Depth V2**, and the code extracts, preprocesses, and trains a segmentation model.
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Dataset](#dataset)
+- [SegNet Model Explanation](#segnet-model-explanation)
+- [Training Setup](#training-setup)
+- [Explanation of test_code.py](#explanation-of-test_codepy)
+
 ## System Requirements & Training Setup
 
 Initially, I attempted to run the code on **Google Colab (free version)**, but it only worked for preprocessing the dataset. Training on Colab resulted in an error due to insufficient memory. To train the model, I used an **NVIDIA A100 server** available at my university, which has **80GB** of GPU memory. The code requires approximately **25GB** of memory during training.
@@ -70,12 +78,15 @@ The script performs the following steps:
 ├── requirements.txt      # (Optional) List of dependencies
 ```
 
-# SegNet Model Explanation(add images)
+# SegNet Model Explanation
 
 ## Overview
 SegNet is an encoder-decoder model designed for semantic segmentation. It utilizes max pooling indices during upsampling to enhance feature retention and reduce computational complexity. The encoder part of SegNet is identical to the convolutional layers of the VGG16 model, allowing the use of pretrained VGG16 weights for initializing the encoder layers. 
 
 Using pretrained weights is beneficial as it leverages a model trained on large datasets like ImageNet, which has already learned important feature representations such as edges, textures, and objects. This significantly reduces training time and improves performance, especially when data is limited.
+
+![SegNet Architecture](images/SegNet_architecture.png)
+![SegNet pooling indices](images/pooling_indices.png)
 
 ## Model Components
 The SegNet model in `segnet_pretrained_encoder.py` consists of four main classes:
@@ -103,7 +114,7 @@ An **encoder block** consists of multiple blue layers (either 2 or 3) followed b
 - The encoder block returns both the **feature map** and the **pooling indices** from max pooling for later upsampling.
 
 ### 3. DecoderBlock
-The decoder block mirrors the encoder but includes an important distinction:
+A **Decoder block** consists of an upsampling layer(red layer) followed by multiple multiple blue layers (either 2 or 3). The decoder block mirrors the encoder but includes an important distinction:
 - In the **final decoder block**, the last convolutional layer should output the final feature map without batch normalization and ReLU. 
 - This is because the output represents raw class scores (logits), which will be used in the loss function (e.g., `CrossEntropyLoss`). Applying ReLU or normalization at this stage would distort the classification scores.
 
@@ -118,6 +129,9 @@ The SegNet model consists of 10 encoder and decoder blocks.
 
 ## Understanding `in_channels = out_channels`
 In the training script, the SegNet model does not use pretrained weights. A key implementation detail is the `in_channels = out_channels` pattern:
+```python
+in_channels = out_channels
+```
 - In the **encoder block**, `in_channels = out_channels` after the first layer to ensure consistent depth.
 - In the **decoder block**, `in_channels = out_channels` is applied at the last layer to maintain feature consistency.
 
@@ -141,9 +155,9 @@ This ensures that high-level features are retained before reconstructing the seg
 ## Conclusion
 The SegNet model effectively repurposes the VGG16 encoder while utilizing max pooling indices for upsampling. The design choices, including the use of pretrained weights and structured encoder-decoder channel transitions, significantly enhance segmentation performance while maintaining computational efficiency.
 
-5
+---
 
-## Training Setup
+# Training Setup
 
 Before starting the training process, we need to define essential components such as the dataset, data loader, hyperparameters, loss function, and optimizer. These ensure that the model is trained efficiently and effectively.
 
@@ -309,9 +323,9 @@ This setup ensures stable training by:
 
 The next step is evaluating the trained model and analyzing its performance.
 
-6
+---
 
-# Explanation of test_code.py( show results and explain inference code is not tested and is only for reference)
+# Explanation of test_code.py
 
 test_code.py is used for evaluating the performance of the trained SegNet model on the test dataset. It performs the following key tasks:
 
@@ -369,12 +383,20 @@ test_code.py is used for evaluating the performance of the trained SegNet model 
    - The results are printed to summarize the model’s performance.
    - Class-wise accuracies (if implemented) can also be displayed.
 
+## Results:
+
+![loss value graph](images/loss_value_graph.png)
+![result1](images/result1.jpg)
+![result2](images/result2.jpg)
+![result3](images/result3.jpg)
+
 ### Summary
 The `test_code.py` script efficiently evaluates the SegNet model using multiple performance metrics and provides a visualization of predictions for qualitative assessment. It ensures a thorough evaluation of the segmentation results on the test dataset, making it easier to analyze strengths and weaknesses in the model’s predictions.
 
 
 ## References
 
+- [SegNet Paper](https://arxiv.org/pdf/1511.00561)
 - [SegNet-RGB-D-for-Semantic-Segmentation](https://github.com/Yangzhangcst/RGBD-semantic-segmentation)
 - [PyTorch implementation of SegNet: A Deep Convolutional Encoder-Decoder trained on NYUDv2 Dataset](https://cs.nyu.edu/~fergus/datasets/nyu_depth_v2.html)
 - [NYU Depth V2 Dataset (Download Labelled dataset, 2.8GB)](https://cs.nyu.edu/~fergus/datasets/nyu_depth_v2.html)
