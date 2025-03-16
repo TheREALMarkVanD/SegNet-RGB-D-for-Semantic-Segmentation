@@ -15,10 +15,10 @@ This project requires Python and the following libraries:
 - **numpy** (for numerical computations)
 - **scikit-learn** (for data splitting)
 
-You can install the required libraries with:
+First, ensure you have Python installed. Then, install the required packages using:
 
 ```sh
-pip install torch h5py numpy scikit-learn
+pip install -r requirements.txt
 ```
 
 > **Note:** PyTorch installation may vary depending on your system. Follow the [official PyTorch installation guide](https://pytorch.org/get-started/installation/) for detailed instructions.
@@ -60,38 +60,17 @@ The script performs the following steps:
 ## Project Structure
 
 ```sh
-├── data/                 # Directory for dataset storage
-│   ├── nyu_depth_v2_labeled.mat  # Raw dataset file
-├── main.py               # Main script for dataset processing & model execution
+├── training_code.py  # Main script for training the model, script use non pretrained model.
 ├── NYUD_Data_Preprocess_into_splits.py  # Dataset preprocessing script
-├── model/                # Directory containing model definitions
-├── results/              # Directory to store outputs
+├── segnet_pretrained_encoder  # pretrained model, use to increase training speed and accuracy
+├── test_code.py  # Script for testing the model after training, ensure the correct segnet model you want is called(pretrained/non-pretrained. Creates results of with images of segmentation map and displays metrics.
+├── inference_code_sample.py # currently not tested, make adjustments and only use this as reference.
+├── images/              # Directory to images for readme
 ├── README.md             # Project documentation
 ├── requirements.txt      # (Optional) List of dependencies
 ```
 
-
-
-## References
-
-- [SegNet-RGB-D-for-Semantic-Segmentation](https://github.com/Yangzhangcst/RGBD-semantic-segmentation)
-- [PyTorch implementation of SegNet: A Deep Convolutional Encoder-Decoder trained on NYUDv2 Dataset](https://cs.nyu.edu/~fergus/datasets/nyu_depth_v2.html)
-- [NYU Depth V2 Dataset (Download Labelled dataset, 2.8GB)](https://cs.nyu.edu/~fergus/datasets/nyu_depth_v2.html)
-- [Comparison of deep learning models for RGB-D Semantic Segmentation](https://github.com/Yangzhangcst/RGBD-semantic-segmentation)
-- [Building SegNet from Scratch using PyTorch (helped in model development)](https://medium.com/@nikdenof/segnet-from-scratch-using-pytorch-3fe9b4527239)
-- [SUNRGBD Metadata Repo - Train-Test Labels (Larger dataset than NYUDv2 but lower image quality)](https://github.com/ankurhanda/sunrgbd-meta-data)
-- [Optimized SUN RGBD Repository](https://github.com/chrischoy/SUN_RGBD)
-
----
-
-
-
-
-
-
-3
-
-# SegNet Model Explanation
+# SegNet Model Explanation(add images)
 
 ## Overview
 SegNet is an encoder-decoder model designed for semantic segmentation. It utilizes max pooling indices during upsampling to enhance feature retention and reduce computational complexity. The encoder part of SegNet is identical to the convolutional layers of the VGG16 model, allowing the use of pretrained VGG16 weights for initializing the encoder layers. 
@@ -161,8 +140,6 @@ This ensures that high-level features are retained before reconstructing the seg
 
 ## Conclusion
 The SegNet model effectively repurposes the VGG16 encoder while utilizing max pooling indices for upsampling. The design choices, including the use of pretrained weights and structured encoder-decoder channel transitions, significantly enhance segmentation performance while maintaining computational efficiency.
-
-
 
 5
 
@@ -334,7 +311,7 @@ The next step is evaluating the trained model and analyzing its performance.
 
 6
 
-**Explanation of test_code.py**
+# Explanation of test_code.py( show results and explain inference code is not tested and is only for reference)
 
 test_code.py is used for evaluating the performance of the trained SegNet model on the test dataset. It performs the following key tasks:
 
@@ -395,3 +372,15 @@ test_code.py is used for evaluating the performance of the trained SegNet model 
 ### Summary
 The `test_code.py` script efficiently evaluates the SegNet model using multiple performance metrics and provides a visualization of predictions for qualitative assessment. It ensures a thorough evaluation of the segmentation results on the test dataset, making it easier to analyze strengths and weaknesses in the model’s predictions.
 
+
+## References
+
+- [SegNet-RGB-D-for-Semantic-Segmentation](https://github.com/Yangzhangcst/RGBD-semantic-segmentation)
+- [PyTorch implementation of SegNet: A Deep Convolutional Encoder-Decoder trained on NYUDv2 Dataset](https://cs.nyu.edu/~fergus/datasets/nyu_depth_v2.html)
+- [NYU Depth V2 Dataset (Download Labelled dataset, 2.8GB)](https://cs.nyu.edu/~fergus/datasets/nyu_depth_v2.html)
+- [Comparison of deep learning models for RGB-D Semantic Segmentation](https://github.com/Yangzhangcst/RGBD-semantic-segmentation)
+- [Building SegNet from Scratch using PyTorch (helped in model development)](https://medium.com/@nikdenof/segnet-from-scratch-using-pytorch-3fe9b4527239)
+- [SUNRGBD Metadata Repo - Train-Test Labels (Larger dataset than NYUDv2 but lower image quality)](https://github.com/ankurhanda/sunrgbd-meta-data)
+- [Optimized SUN RGBD Repository](https://github.com/chrischoy/SUN_RGBD)
+
+---
