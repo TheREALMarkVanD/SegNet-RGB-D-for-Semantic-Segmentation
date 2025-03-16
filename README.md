@@ -127,7 +127,7 @@ The SegNet model consists of 10 encoder and decoder blocks.
   - For 3 blue layers: `(2 + 2) * 3 = 6` trainable layers.
   - Adding the max pooling layer results in a total of 7 trainable layers.
 
-## Understanding `in_channels = out_channels`
+### Understanding `in_channels = out_channels`
 In the training script, the SegNet model does not use pretrained weights. A key implementation detail is the `in_channels = out_channels` pattern:
 ```python
 in_channels = out_channels
