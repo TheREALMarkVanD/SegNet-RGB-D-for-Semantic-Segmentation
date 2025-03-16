@@ -65,7 +65,7 @@ The script performs the following steps:
 ├── segnet_pretrained_encoder  # pretrained model, use to increase training speed and accuracy
 ├── test_code.py  # Script for testing the model after training, ensure the correct segnet model you want is called(pretrained/non-pretrained. Creates results of with images of segmentation map and displays metrics.
 ├── inference_code_sample.py # currently not tested, make adjustments and only use this as reference.
-├── images/              # Directory to images for readme
+├── images/              # Directory to images for README.md
 ├── README.md             # Project documentation
 ├── requirements.txt      # (Optional) List of dependencies
 ```
